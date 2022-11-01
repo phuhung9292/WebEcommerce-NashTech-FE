@@ -7,7 +7,7 @@ import ProductDetail from "../Components/pages/ProductDetails";
 const Home = () => {
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <Slider />
       <Products />
       {/* <ProductDetail/> */}

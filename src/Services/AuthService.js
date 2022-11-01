@@ -8,11 +8,7 @@ class AuthService {
       email,
       password,
     });
-    // .then((res) => {
-    //   if (res.data.token) {
-    //     localStorage.setItem("user", JSON.stringify(res.data));
-    //   }
-    // });
+    console.log(data);
     return data;
   };
   logout() {
