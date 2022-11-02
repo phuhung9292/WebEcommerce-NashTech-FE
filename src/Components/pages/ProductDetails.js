@@ -134,18 +134,6 @@ function ProductDetail(props) {
               </button>
             </div>
           </div>
-          {/* {productItem.data.productImage.map((item) => {
-            return (
-              <div className="details">
-                <div className="big-img">
-                  <img src={item.image} alt="" />
-                </div>
-                <div className="Box">
-                  <div className="row"></div>
-                </div>
-              </div>
-            );
-          })} */}
           <div className="inline-flex flex-col ">
             <div> {productItem.name}</div>
             {price != 0 && (

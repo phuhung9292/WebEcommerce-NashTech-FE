@@ -15,6 +15,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Badge } from "@mui/material";
 import { ShoppingCartOutlined } from "@mui/icons-material";
 import { color } from "@mui/system";
+import CartDetail from "./Components/pages/CartDetail";
 
 function App() {
   const styleLink = "textDecoration: 'none' color: black";
@@ -109,8 +110,10 @@ function App() {
             )}
             {showUserPage && (
               <div className={style}>
-                <Badge badgeContent={2} color="primary">
-                  <ShoppingCartOutlined></ShoppingCartOutlined>
+                <Badge color="primary">
+                  <Link to={"/cart-detail"}>
+                    <ShoppingCartOutlined></ShoppingCartOutlined>
+                  </Link>
                 </Badge>
               </div>
             )}
@@ -118,63 +121,11 @@ function App() {
         </div>
       </div>
       <div>
-        {/* <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <Link to={"/"} className="navbar-brand">
-            {" "}
-            Shoppi
-          </Link>
-          <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to={"/home"} className="nav-Link">
-                Home
-              </Link>
-            </li>
-            {showUserPage && (
-              <li className="nav-item">
-                <Link to={"/home"} className="nav-Link">
-                  UserPage
-                </Link>
-              </li>
-            )}
-            {showAdminPage && (
-              <li className="nav-item">
-                <Link to={"/admin"} className="nav-Link">
-                  AdminPage
-                </Link>
-              </li>
-            )}
-          </div>
-
-          {currentUser ? (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to={"/profile"} className="nav-Link">
-                  {currentUser.email}
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to={"/login"} onClick={logOut}>
-                  Logout
-                </Link>
-              </li>
-            </div>
-          ) : (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                
-              </li>
-              <li className="nav-item">
-                <Link to={"/registor"} className="nav-Link">
-                  Sign Up
-                </Link>
-              </li>
-            </div>
-          )}
-        </nav> */}
         <div className="container mt-3">
           <Routes>
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/cart-detail" element={<CartDetail />} />
             <Route
               path="/productDetail/:productid"
               element={<ProductDetail />}
