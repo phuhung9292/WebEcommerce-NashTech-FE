@@ -11,72 +11,114 @@ import ProductDetail from "./Components/pages/ProductDetails";
 import { useState, useEffect } from "react";
 import AuthService from "./Services/AuthService";
 import "bootstrap/dist/css/bootstrap.min.css";
+import SearchIcon from "@mui/icons-material/Search";
+import { Badge } from "@mui/material";
+import { ShoppingCartOutlined } from "@mui/icons-material";
+import { color } from "@mui/system";
 
 function App() {
-  // constructor(props) {
-  //   super(props);
-  //   this.logOut = this.logOut.bind(this);
-
-  //   this.state = {
-  //     showAdminPage: false,
-  //     showUserPage: false,
-  //     currentUser: undefined,
-  //   };
-  // }
+  const styleLink = "textDecoration: 'none' color: black";
+  const style = "text-[14px] cursor-pointer ml-[25px] ";
   const [showAdminPage, setShowAdminPage] = useState(false);
   const [showUserPage, setShowUserPage] = useState(false);
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
 
-  // componentDidMount() {
-  //   const user = AuthService.getCurrentUser();
-  //   // this.logOut();
-  //   if (user) {
-  //     this.setState({
-  //       currentUser: user,
-  //       showUserPage: user.role.authority == "Customer",
-  //       showAdminPage: user.role.authority == "Admin",
-  //     });
-  //   }
-  // }
-  // useEffect(() => {
-  //   const user = AuthService.getCurrentUser();
-  //   setCurrentUser(user);
-  // }, []);
-  useEffect(
-    () => {
-      const user = AuthService.getCurrentUser();
-      if (user) {
-        setCurrentUser(user);
-        if (user.role.authority == "Customer") {
-          setShowUserPage(true);
-        }
-        if (user.role.authority == "Admin") {
-          setShowAdminPage(true);
-        }
+  useEffect(() => {
+    setCurrentUser(AuthService.getCurrentUser());
+  }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      console.log(currentUser);
+      if (currentUser.role[0].authority == "Customer") {
+        setShowUserPage(true);
+        console.log(showUserPage);
       }
-      console.log(user);
-      // if (setCurrentUser == null) {
-      //   setShowAdminPage = false;
-      //   setShowUserPage = false;
-      // }
-      // if (user.role.authority === "Customer") {
-      //   setShowUserPage = true;
-      // } else if (user.role.authority === "Admin") {
-      //   setShowAdminPage = true;
-      // }
-    },
-    { currentUser }
-  );
+      if (currentUser.role[0].authority == "Admin") {
+        setShowAdminPage(true);
+      }
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    console.log(currentUser);
+  }, [currentUser]);
 
   const logOut = () => {
     setCurrentUser(AuthService.logout());
+    setShowAdminPage(false);
+    setShowUserPage(false);
   };
-  // render() {
-  // const { currentUser, showAdminPage, showUserPage } = this.state;
+
   return (
-    <Router path={"/trangchu"} forceRefresh={true}>
+    <Router>
+      <div className="navbar h-[60px] shadow-md relative z-10 w-full">
+        <div className="wrapper pl-[20px] pr-[20px] pt-[10px] pb-[10px] flex justify-between items-center flex-row w-full">
+          {showUserPage && (
+            <div className="left flex flex-1 items-center">
+              <div className="language cursor-pointer text-[16px]"> Search</div>
+              <div
+                className="searchInput flex border-[2px] border-solid border-lighgrey rounded-md items-center ml-[10px] p-[5px]
+            focus-within:border-[#8a4af3] transition-all"
+              >
+                <input className="input" type="text" />
+                <SearchIcon className="" style={{ fontSize: "16px" }} />
+              </div>
+            </div>
+          )}
+
+          <div className="center flex-1 text-center ">
+            <div className="logo font-bold text-lg"> Shoppi</div>
+          </div>
+          <div className="right flex flex-1 items-center justify-end">
+            {currentUser ? (
+              <div className="right flex flex-1 items-center justify-end">
+                <div>
+                  <Link
+                    to={"/profile"}
+                    style={{ textDecoration: "none", color: "black" }}
+                  >
+                    {currentUser.email}
+                  </Link>
+                </div>
+                <div className="pl-[20px]">
+                  <Link
+                    to={"/login"}
+                    style={{ textDecoration: "none", color: "black" }}
+                    onClick={logOut}
+                  >
+                    Logout
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <div className="right flex flex-1 items-center justify-end">
+                <div className={style}>
+                  {" "}
+                  <Link to={"/login"} className="nav-Link">
+                    Login
+                  </Link>
+                </div>
+                <div className={style}>
+                  {" "}
+                  <Link to={"/registor"} className="nav-Link">
+                    Sign Up
+                  </Link>
+                </div>
+              </div>
+            )}
+            {showUserPage && (
+              <div className={style}>
+                <Badge badgeContent={2} color="primary">
+                  <ShoppingCartOutlined></ShoppingCartOutlined>
+                </Badge>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
       <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
+        {/* <nav className="navbar navbar-expand navbar-dark bg-dark">
           <Link to={"/"} className="navbar-brand">
             {" "}
             Shoppi
@@ -101,13 +143,6 @@ function App() {
                 </Link>
               </li>
             )}
-            {/* {currentUser && (
-                <li className="nav-item">
-                  <Link to={"/user"} className="nav-Link">
-                    User
-                  </Link>
-                </li>
-              )} */}
           </div>
 
           {currentUser ? (
@@ -118,9 +153,6 @@ function App() {
                 </Link>
               </li>
               <li className="nav-item">
-                {/* <a href="/login" className="nav-Link" onClick={this.logOut}>
-                    LogOut
-                  </a> */}
                 <Link to={"/login"} onClick={logOut}>
                   Logout
                 </Link>
@@ -129,9 +161,7 @@ function App() {
           ) : (
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link to={"/login"} className="nav-Link">
-                  Login
-                </Link>
+                
               </li>
               <li className="nav-item">
                 <Link to={"/registor"} className="nav-Link">
@@ -140,7 +170,7 @@ function App() {
               </li>
             </div>
           )}
-        </nav>
+        </nav> */}
         <div className="container mt-3">
           <Routes>
             <Route path="/home" element={<Home />} />
@@ -149,40 +179,11 @@ function App() {
               path="/productDetail/:productid"
               element={<ProductDetail />}
             />
-
-            {/* <Route exact path="/registor" component={Registor}/> */}
-            {/* <Route exact path ="profile" component={Profile} /> */}
-            {/* <Router path ="/user" component={UserPage} /> */}
-            {/* <Route path="/admin" component={AdminPage} /> */}
           </Routes>
         </div>
       </div>
     </Router>
   );
 }
-
-// return (
-//   <>
-//     {/* <Navbar /> */}
-
-//     {/* <BrowserRouter> */}
-//     <Router>
-//       <Routes>
-//         <Route path="/home" element={<Home />}></Route>
-
-//         <Route path="/login" element={<Login />}></Route>
-//         {/* <Route index element={<Products />}></Route>
-//         <Route path="/" element={<Products />}></Route>
-//         <Route path="/productList" element={<Products />}></Route> */}
-//         <Route path="/addProduct" element={<UploadForm />}></Route>
-//         {/* <Route path="/loadProduct" element={<ImageGrid />}></Route> */}
-//       </Routes>
-//     </Router>
-//     {/* <ProductList /> */}
-//     {/* </BrowserRouter> */}
-//     {/* <AddProduct /> */}
-//   </>
-// );
-// }
 
 export default App;
