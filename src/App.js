@@ -16,6 +16,8 @@ import { Badge } from "@mui/material";
 import { ShoppingCartOutlined } from "@mui/icons-material";
 import { color } from "@mui/system";
 import CartDetail from "./Components/pages/CartDetail";
+import ProfileUser from "./Components/pages/ProfileUser";
+import OrderHistory from "./Components/pages/OrderHistory";
 
 function App() {
   const styleLink = "textDecoration: 'none' color: black";
@@ -123,13 +125,15 @@ function App() {
       <div>
         <div className="container mt-3">
           <Routes>
-            <Route path="/home" element={<Home />} />
+            <Route path="/home" index element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cart-detail" element={<CartDetail />} />
+            <Route path="/profile" element={<ProfileUser />} />
             <Route
               path="/productDetail/:productid"
               element={<ProductDetail />}
             />
+            <Route path="/orderDetail/:orderid" element={<OrderHistory />} />
           </Routes>
         </div>
       </div>
