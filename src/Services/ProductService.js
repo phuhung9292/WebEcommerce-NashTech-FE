@@ -20,7 +20,7 @@ class ProductService {
       CART_ITEM + `/${productItemId}`,
       { quantity },
       {
-        Headers: authHeader(),
+        headers: authHeader(),
       }
     );
   }
