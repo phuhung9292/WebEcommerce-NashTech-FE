@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import authHeader from "./AuthHeader";
 const USER_API_BASE_URL = "http://localhost:8080/api/v1/user";
 
 class AuthService {
@@ -25,6 +25,9 @@ class AuthService {
   }
   getCurrentUser() {
     return JSON.parse(localStorage.getItem("user"));
+  }
+  getUser() {
+    return axios.get(USER_API_BASE_URL, { headers: authHeader() });
   }
 }
 export default new AuthService();
