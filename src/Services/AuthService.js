@@ -15,7 +15,7 @@ class AuthService {
     localStorage.removeItem("user");
   }
   registor(fullName, email, password, address, phone) {
-    return axios.post(USER_API_BASE_URL + "create", {
+    return axios.post(USER_API_BASE_URL + "/create", {
       fullName,
       email,
       password,

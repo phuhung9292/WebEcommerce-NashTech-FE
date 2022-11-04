@@ -56,6 +56,7 @@ export default function OrderHistory() {
     };
     status();
   }, []);
+  useEffect(() => {}, [statusOrder]);
 
   return (
     <TableContainer component={Paper}>
