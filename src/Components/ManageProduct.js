@@ -67,6 +67,11 @@ function ManageProduct() {
                       </Link>
                     </TableCell>
                     <TableCell align="right">
+                      <Link to={`variation/${item.id}`}>
+                        <Button variant="contained">Variation</Button>
+                      </Link>
+                    </TableCell>
+                    <TableCell align="right">
                       <Link to={`edit-category/${item.id}`}>
                         <Button variant="outlined">Edit</Button>
                       </Link>
