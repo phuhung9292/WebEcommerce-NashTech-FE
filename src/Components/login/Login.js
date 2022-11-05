@@ -20,15 +20,13 @@ function Login() {
       const response = AuthService.login(details.email, details.password).then(
         (res) => {
           console.log(res.data.email);
-          // setSuccess(true);
-          // if (res.data.email == null) {
-          //   setSuccess(false);
-          // }
-          // const accessToken = res.data.token;
-          // const role = (res = res.data.authority.role);
-          // setAuth({ role, accessToken });
           localStorage.setItem("user", JSON.stringify(res.data));
-          navigate("/home");
+          if (res.data.role[0].authority == "Customer") {
+            navigate("/home");
+          } else if (res.data.role[0].authority == "Admin") {
+            navigate("/admin");
+          }
+
           window.location.reload(false);
         }
       );

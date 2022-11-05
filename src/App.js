@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
-import AddProduct from "./Components/AddProduct";
 import ImageGrid from "./Components/ImageGrid";
 import Navbar from "./Components/Navbar";
 import UploadForm from "./Components/UploadForm";
 import Home from "./Pages/Home";
+import AddProduct from "./Components/pages/AddProduct";
 // import "swipe";
 import Login from "./Components/login/Login";
 import ProductDetail from "./Components/pages/ProductDetails";
@@ -18,6 +18,13 @@ import { color } from "@mui/system";
 import CartDetail from "./Components/pages/CartDetail";
 import ProfileUser from "./Components/pages/ProfileUser";
 import OrderHistory from "./Components/pages/OrderHistory";
+import Registor from "./Components/pages/Registor";
+import AdminPage from "./Components/pages/AdminPage";
+import ManageProduct from "./Components/ManageProduct";
+import UserManage from "./Components/UserManage";
+import CategoryDetail from "./Components/pages/CategoryDetail";
+import CategoryAdd from "./Components/pages/CategoryAdd";
+import AdminGetAllProduct from "./Components/pages/AdminGetAllProduct";
 
 function App() {
   const styleLink = "textDecoration: 'none' color: black";
@@ -129,6 +136,23 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/cart-detail" element={<CartDetail />} />
             <Route path="/profile" element={<ProfileUser />} />
+            <Route path="/registor" element={<Registor />} />
+            <Route path="/admin" element={<AdminPage />}>
+              <Route path="product-manage" element={<ManageProduct />}>
+                <Route
+                  path="edit-category/:id"
+                  element={<CategoryDetail />}
+                ></Route>
+                <Route path="add" element={<CategoryAdd />}></Route>
+                <Route
+                  path="view-products/:id"
+                  element={<AdminGetAllProduct />}
+                >
+                  <Route path="addProduct/:id" element={<AddProduct />}></Route>
+                </Route>
+              </Route>
+              <Route path="user-manage" element={<UserManage />}></Route>
+            </Route>
             <Route
               path="/productDetail/:productid"
               element={<ProductDetail />}

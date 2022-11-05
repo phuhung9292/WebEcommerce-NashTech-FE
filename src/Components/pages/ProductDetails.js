@@ -237,13 +237,6 @@ function ProductDetail(props) {
               </div>
             )}
           </div>
-          {/* {productItem.data.size.map((item) => {
-            return (
-              <Button size="small" key={item.id}>
-                {item.name}
-              </Button>
-            );
-          })} */}
         </div>
       )}
     </>
