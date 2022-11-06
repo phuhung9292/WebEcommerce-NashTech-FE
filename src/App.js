@@ -25,6 +25,8 @@ import UserManage from "./Components/UserManage";
 import CategoryDetail from "./Components/pages/CategoryDetail";
 import CategoryAdd from "./Components/pages/CategoryAdd";
 import AdminGetAllProduct from "./Components/pages/AdminGetAllProduct";
+import Variation from "./Components/pages/Variation";
+import Variations from "./Components/pages/Variations";
 
 function App() {
   const styleLink = "textDecoration: 'none' color: black";
@@ -143,6 +145,9 @@ function App() {
                   path="edit-category/:id"
                   element={<CategoryDetail />}
                 ></Route>
+                <Route path="variation/:id" element={<Variation />}>
+                  <Route path="variations/:id" element={<Variations />} />
+                </Route>
                 <Route path="add" element={<CategoryAdd />}></Route>
                 <Route
                   path="view-products/:id"
