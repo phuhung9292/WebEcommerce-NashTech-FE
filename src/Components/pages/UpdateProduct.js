@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-// import ProgressBar from "../ProgressBar";
-import Button from "@mui/material/Button";
-import useStorage from "../../hooks/useStorage";
+import React, { useEffect, useState } from "react";
+import { useParams, Link, Outlet } from "react-router-dom";
 import ProductService from "../../Services/ProductService";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
-const ProgressBar = ({ file, setFile, setFormCreateProduct }) => {
+import useStorage from "../../hooks/useStorage";
+
+const ProgressBar = ({ file, setFile, setFormNewProduct }) => {
   const { url, progress } = useStorage(file);
   console.log(progress, url);
   useEffect(() => {
     if (url) {
-      setFormCreateProduct((prev) => ({ ...prev, productImage: url }));
+      setFormNewProduct((prev) => ({ ...prev, productImage: url }));
       setFile(null);
     }
   }, [url, setFile]);
@@ -20,9 +21,8 @@ const ProgressBar = ({ file, setFile, setFormCreateProduct }) => {
     </div>
   );
 };
-
-function AddProduct() {
-  const { cateid } = useParams();
+export default function UpdateProduct() {
+  const { productid } = useParams();
   const [file, setFile] = useState(null);
   const [file2, setFile2] = useState(null);
   const [error, setError] = useState(null);
@@ -30,18 +30,16 @@ function AddProduct() {
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
   const [descrip, setDescrip] = useState("");
-  // const { url, progress } = useStorage(file);
-  const [formCreateProduct, setFormCreateProduct] = useState({
-    cateid: { cateid },
+  const [productId, setProductId] = useState("");
+  const [cateId, setCateId] = useState("");
+
+  const [formNewProduct, setFormNewProduct] = useState({
+    id: "",
+    cateid: "",
     name: "",
     description: "",
     productImage: "",
   });
-  // useEffect(() => {
-  //   if (url) {
-  //     setFile(null);
-  //   }
-  // }, [url, setFile]);
   const handleChange = (e) => {
     let selected = e.target.files[0];
     if (selected && type.includes(selected.type)) {
@@ -53,17 +51,29 @@ function AddProduct() {
     }
   };
 
-  useEffect(() => {}, [formCreateProduct]);
-  // useEffect(() => {
-  //   setImage(formCreateProduct.productImage);
-  // }, [formCreateProduct.productImage]);
+  useEffect(() => {
+    const fetchData = async () => {
+      await ProductService.getProductById(productid).then((res) => {
+        console.log(res);
+
+        setProductId(res.data.id);
+        setName(res.data.name);
+        setDescrip(res.data.description);
+        setImage(res.data.productImage);
+        setCateId(res.data.categoryId);
+      });
+    };
+    fetchData();
+  }, [productid]);
+  useEffect(() => {}, [productId, name, descrip, image]);
 
   const add = () => {
-    ProductService.adminAddProduct(
-      cateid,
-      formCreateProduct.name,
-      formCreateProduct.description,
-      formCreateProduct.productImage
+    ProductService.updateProduct(
+      productid,
+      formNewProduct.name,
+      formNewProduct.description,
+      formNewProduct.productImage,
+      cateId
     )
       .then((res) => {
         alert("Add success");
@@ -72,7 +82,7 @@ function AddProduct() {
       .catch((err) => {
         alert("add fail");
       });
-    console.log(formCreateProduct);
+    // console.log(formProduct);
   };
   return (
     <div>
@@ -86,12 +96,14 @@ function AddProduct() {
               <label for="email" class="block mb-1 text-gray-600 font-semibold">
                 Name Product <span className="text-red-600">*</span>
               </label>
-              <input
-                type="text"
-                class="bg-indigo-50 px-4 py-2 outline-none rounded-md w-full"
+              <TextField
+                label={name}
+                id="outlined-size-small"
+                size="small"
+                // value={category}
                 onChange={(e) =>
-                  setFormCreateProduct({
-                    ...formCreateProduct,
+                  setFormNewProduct({
+                    ...formNewProduct,
                     name: e.target.value,
                   })
                 }
@@ -101,20 +113,27 @@ function AddProduct() {
               <label for="email" class="block mb-1 text-gray-600 font-semibold">
                 Descirption <span className="text-red-600">*</span>
               </label>
-              <input
-                type="text"
-                class="bg-indigo-50 px-4 py-2 outline-none rounded-md w-full"
+              <TextField
+                label={descrip}
+                id="outlined-size-small"
+                size="small"
+                // value={category}
                 onChange={(e) =>
-                  setFormCreateProduct({
-                    ...formCreateProduct,
+                  setFormNewProduct({
+                    ...formNewProduct,
                     description: e.target.value,
                   })
                 }
               />
             </div>
-            {formCreateProduct.productImage && (
+            {image && !formNewProduct.productImage && (
               <div className="h-32 w-40">
-                <img src={formCreateProduct.productImage} />
+                <img src={image} />
+              </div>
+            )}
+            {formNewProduct.productImage && (
+              <div className="h-32 w-40">
+                <img src={formNewProduct.productImage} />
               </div>
             )}
             <Button variant="contained" component="label">
@@ -130,25 +149,25 @@ function AddProduct() {
                 <ProgressBar
                   file={file}
                   setFile={setFile}
-                  setFormCreateProduct={setFormCreateProduct}
+                  setFormNewProduct={setFormNewProduct}
                 />
               )}
             </div>
           </div>
-          {formCreateProduct.productImage &&
-          formCreateProduct.description &&
-          formCreateProduct.name ? (
+          {formNewProduct.productImage &&
+          formNewProduct.description &&
+          formNewProduct.name ? (
             <button
               class="mt-4 w-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-indigo-100 py-2 rounded-md text-lg tracking-wide"
               onClick={() => {
                 add();
               }}
             >
-              Create
+              Update
             </button>
           ) : (
             <Button variant="contained" disabled>
-              Create
+              Update
             </Button>
           )}
         </div>
@@ -156,5 +175,3 @@ function AddProduct() {
     </div>
   );
 }
-
-export default AddProduct;
