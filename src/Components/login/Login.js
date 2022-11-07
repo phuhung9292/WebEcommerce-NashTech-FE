@@ -17,8 +17,8 @@ function Login() {
 
   const login = async () => {
     try {
-      const response = AuthService.login(details.email, details.password).then(
-        (res) => {
+      const response = AuthService.login(details.email, details.password)
+        .then((res) => {
           console.log(res.data.email);
           localStorage.setItem("user", JSON.stringify(res.data));
           if (res.data.role[0].authority == "Customer") {
@@ -28,8 +28,10 @@ function Login() {
           }
 
           window.location.reload(false);
-        }
-      );
+        })
+        .catch((err) => {
+          alert("Email Or Password not correct");
+        });
     } catch (err) {
       console.log("login Fail");
     }

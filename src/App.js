@@ -33,6 +33,7 @@ import AdminProductItem from "./Components/pages/AdminProductItem";
 import AddProductItem from "./Components/pages/AddProductItem";
 import UpdateProductItem from "./Components/pages/UpdateProductItem";
 import ManageUser from "./Components/pages/ManageUser";
+import ManageOrders from "./Components/pages/ManageOrders";
 
 function App() {
   const styleLink = "textDecoration: 'none' color: black";
@@ -147,6 +148,12 @@ function App() {
             <Route path="/registor" element={<Registor />} />
             <Route path="/admin" element={<AdminPage />}>
               <Route path="management-user" element={<ManageUser />}></Route>
+              <Route path="manage-orders" element={<ManageOrders />}>
+                <Route
+                  path="admin-order-detail/:orderid"
+                  element={<OrderHistory />}
+                />
+              </Route>
               <Route path="product-manage" element={<ManageProduct />}>
                 <Route
                   path="edit-category/:id"

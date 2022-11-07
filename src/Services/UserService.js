@@ -15,5 +15,15 @@ class UserService {
   getUser() {
     return axios.get(USER_API_BASE_URL + "/user", { headers: authHeader() });
   }
+
+  changeRoleUser(id) {
+    return axios.put(
+      USER_API_BASE_URL + "/user" + "/admin" + `/${id}`,
+      {},
+      {
+        headers: authHeader(),
+      }
+    );
+  }
 }
 export default new UserService();

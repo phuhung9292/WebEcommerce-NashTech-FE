@@ -10,6 +10,7 @@ import Paper from "@mui/material/Paper";
 import CartService from "../../Services/CartService";
 import Button from "@mui/material/Button";
 import Order from "../../Services/Order";
+import { useNavigate } from "react-router-dom";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -31,7 +32,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function CartDetail() {
   const [cartList, setCartList] = useState(null);
-
+  let navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [loadDelete, setLoadDelete] = useState(0);
   useEffect(() => {
@@ -63,6 +64,7 @@ function CartDetail() {
         const mess = res.data.Message;
         alert(mess);
         console.log(res);
+        navigate("/home");
       })
       .catch((err) => {
         // console.log(err.response.data.message);
