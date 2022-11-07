@@ -32,18 +32,18 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function Variation() {
-  const { id } = useParams();
+  const { vid } = useParams();
   const [variation, setVariation] = useState([]);
 
   useEffect(() => {
     const fectchData = async () => {
-      await ProductService.getVariationByCateId(id).then((res) => {
+      await ProductService.getVariationByCateId(vid).then((res) => {
         console.log(res.data);
         setVariation(res.data);
       });
     };
     fectchData();
-  }, [id]);
+  }, [vid]);
   useEffect(() => {}, [variation]);
   return (
     <div>

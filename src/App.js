@@ -27,6 +27,12 @@ import CategoryAdd from "./Components/pages/CategoryAdd";
 import AdminGetAllProduct from "./Components/pages/AdminGetAllProduct";
 import Variation from "./Components/pages/Variation";
 import Variations from "./Components/pages/Variations";
+import OptionAdd from "./Components/pages/OptionAdd";
+import UpdateProduct from "./Components/pages/UpdateProduct";
+import AdminProductItem from "./Components/pages/AdminProductItem";
+import AddProductItem from "./Components/pages/AddProductItem";
+import UpdateProductItem from "./Components/pages/UpdateProductItem";
+import ManageUser from "./Components/pages/ManageUser";
 
 function App() {
   const styleLink = "textDecoration: 'none' color: black";
@@ -140,20 +146,49 @@ function App() {
             <Route path="/profile" element={<ProfileUser />} />
             <Route path="/registor" element={<Registor />} />
             <Route path="/admin" element={<AdminPage />}>
+              <Route path="management-user" element={<ManageUser />}></Route>
               <Route path="product-manage" element={<ManageProduct />}>
                 <Route
                   path="edit-category/:id"
                   element={<CategoryDetail />}
                 ></Route>
-                <Route path="variation/:id" element={<Variation />}>
-                  <Route path="variations/:id" element={<Variations />} />
+                <Route path="variation/:vid" element={<Variation />}>
+                  <Route path="variations/:vsid" element={<Variations />}>
+                    <Route
+                      path="addOption/:aoid"
+                      element={<OptionAdd />}
+                    ></Route>
+                  </Route>
                 </Route>
                 <Route path="add" element={<CategoryAdd />}></Route>
                 <Route
+                  exact
                   path="view-products/:id"
                   element={<AdminGetAllProduct />}
                 >
-                  <Route path="addProduct/:id" element={<AddProduct />}></Route>
+                  <Route
+                    path="addProduct/:cateid"
+                    element={<AddProduct />}
+                  ></Route>
+                  <Route
+                    exact
+                    path="updateProduct/:productid"
+                    element={<UpdateProduct />}
+                  ></Route>
+                  <Route
+                    exact
+                    path="adminProductItem/:proid"
+                    element={<AdminProductItem />}
+                  >
+                    <Route
+                      path="addProductItem/:productid"
+                      element={<AddProductItem />}
+                    />
+                    <Route
+                      path="updateProductItem/:productItemId"
+                      element={<UpdateProductItem />}
+                    />
+                  </Route>
                 </Route>
               </Route>
               <Route path="user-manage" element={<UserManage />}></Route>

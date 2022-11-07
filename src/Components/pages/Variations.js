@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link, Outlet } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,6 +9,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import ProductService from "../../Services/ProductService";
+import ControlPointSharpIcon from "@mui/icons-material/ControlPointSharp";
+import IconButton from "@mui/material/IconButton";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -29,20 +31,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 function Variations() {
-  const { id } = useParams();
+  const { vsid } = useParams();
   const [variationOption, setVariationOption] = useState([]);
   const [content, setContent] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      await ProductService.getVariationOptionByVariationId(id).then((res) => {
+      await ProductService.getVariationOptionByVariationId(vsid).then((res) => {
         setVariationOption(res.data);
         setContent(res.data[0].tblVariationByVariationId.name);
         console.log(res);
       });
     };
     fetchData();
-  }, [id]);
+  }, [vsid]);
 
   return (
     <div>
@@ -70,25 +72,15 @@ function Variations() {
                 <StyledTableCell align="right"></StyledTableCell>
               </StyledTableRow>
             ))}
+            <IconButton color="primary">
+              <Link to={`addOption/${vsid}`}>
+                <ControlPointSharpIcon />
+              </Link>
+            </IconButton>
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <List
-        sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        aria-label="contacts"
-      >
-        {variationOption.map((item) => (
-          <ListItem>
-            <ListItemButton>
-              <ListItemText primary={item.value} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-
-        <ListItem>
-          <ListItemButton />
-        </ListItem>
-      </List> */}
+      <Outlet />
     </div>
   );
 }

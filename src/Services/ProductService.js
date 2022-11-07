@@ -64,7 +64,8 @@ class ProductService {
   }
   adminAddProduct(categoryId, name, description, productImage) {
     return axios.post(
-      PRODUCT_API_BASE_URL + { categoryId, name, description, productImage },
+      PRODUCT_API_BASE_URL,
+      { categoryId, name, description, productImage },
       { headers: authHeader() }
     );
   }
@@ -73,6 +74,62 @@ class ProductService {
   }
   getVariationOptionByVariationId(id) {
     return axios.get(VARIATION_OPTION_API + "/variation" + `/${id}`);
+  }
+  addVariationOption(variationId, value) {
+    return axios.post(
+      VARIATION_OPTION_API + "/create",
+      { variationId, value },
+      { headers: authHeader() }
+    );
+  }
+  getProductById(id) {
+    return axios.get(PRODUCT_API_BASE_URL + `/${id}`);
+  }
+  updateProduct(id, name, description, productImage, categoryId) {
+    return axios.put(
+      PRODUCT_API_BASE_URL + "/update",
+      { id, name, description, productImage, categoryId },
+      { headers: authHeader() }
+    );
+  }
+  adminGetAllProductItemByProductId(id) {
+    return axios.get(PRODUCT_ITEM_BASE_URL + "/admin" + `/${id}`);
+  }
+  adminGetAllColorAndSizeByCateId(id) {
+    return axios.get(VARIATION_OPTION_API + "/cate" + `/${id}`);
+  }
+
+  adminCreateProductItem(
+    productId,
+    variation1,
+    variation2,
+    quantity,
+    price,
+    productImage
+  ) {
+    return axios.post(
+      PRODUCT_ITEM_BASE_URL,
+      { quantity, price, productImage },
+      {
+        headers: authHeader(),
+
+        params: {
+          productId: productId,
+          variation1: variation1,
+          variation2: variation2,
+        },
+      }
+    );
+  }
+  getProductItemByProductItemId(id) {
+    return axios.get(PRODUCT_ITEM_BASE_URL + "/productItemId" + `/${id}`);
+  }
+  updateProductItem(id, quantity, price, productImage) {
+    return axios.put(
+      PRODUCT_ITEM_BASE_URL,
+      { id, quantity, price, productImage },
+      { headers: authHeader() }
+    );
   }
 }
 export default new ProductService();

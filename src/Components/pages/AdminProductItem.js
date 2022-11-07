@@ -14,7 +14,6 @@ import SendIcon from "@mui/icons-material/Send";
 import IconButton from "@mui/material/IconButton";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -33,29 +32,28 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-
-function AdminGetAllProduct() {
-  const { id } = useParams();
+function AdminProductItem() {
+  const { proid } = useParams();
   const [products, setProducts] = useState("");
-
+  const [cateId, setCateId] = useState("");
   useEffect(() => {
     const fetchData = async () => {
-      await ProductService.getProductByCateId(id)
+      await ProductService.adminGetAllProductItemByProductId(proid)
         .then((res) => {
           setProducts(res.data);
+
           console.log(res.data);
         })
         .catch((err) => {
           console.log(err.data);
         });
     };
-    console.log(id);
+    console.log(proid);
     fetchData();
-  }, [id]);
-
+  }, [proid]);
   return (
     <div>
-      <h1> List Product By Id: {id}</h1>
+      <h1> List ProductItem By Id: {proid}</h1>
       <div>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -63,10 +61,11 @@ function AdminGetAllProduct() {
               <TableRow>
                 <StyledTableCell>Name Product</StyledTableCell>
                 <StyledTableCell align="right">Image</StyledTableCell>
-                <StyledTableCell align="right">Description</StyledTableCell>
-                <StyledTableCell align="right">Type</StyledTableCell>
-                <StyledTableCell align="right">Status</StyledTableCell>
-                <StyledTableCell align="right"></StyledTableCell>
+                <StyledTableCell align="right">Price</StyledTableCell>
+                <StyledTableCell align="right">Quantity</StyledTableCell>
+                <StyledTableCell align="right">Create Date</StyledTableCell>
+                <StyledTableCell align="right">Update Date</StyledTableCell>
+                <StyledTableCell align="right">Option</StyledTableCell>
                 <StyledTableCell align="right"></StyledTableCell>
               </TableRow>
             </TableHead>
@@ -76,7 +75,7 @@ function AdminGetAllProduct() {
                   return (
                     <StyledTableRow key={item.id}>
                       <StyledTableCell component="th" scope="row">
-                        {item.name}
+                        {item.tblProductByProductId.name}
                       </StyledTableCell>
                       <StyledTableCell
                         component="th"
@@ -86,35 +85,34 @@ function AdminGetAllProduct() {
                         <img src={item.productImage} />
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {item.description}
+                        {item.price}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {item.categoryTypeCategory}
+                        {item.quantity}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {item.active && (
-                          <div>
-                            <p> Active</p>
-                          </div>
-                        )}
-                        {!item.active && (
-                          <div>
-                            <p> Deleted</p>
-                          </div>
-                        )}
+                        {item.createDate}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.updateDate}
+                      </StyledTableCell>
+
+                      <StyledTableCell align="right">
+                        {item.tblProductConfigurationsById.map((option) => {
+                          return (
+                            <div>
+                              {
+                                option.tblVariationOptionByVariationOptionId
+                                  .value
+                              }
+                            </div>
+                          );
+                        })}
                       </StyledTableCell>
 
                       <StyledTableCell>
                         {" "}
-                        <Link to={`adminProductItem/${item.id}`}>
-                          <Button variant="contained" endIcon={<SendIcon />}>
-                            Product Item
-                          </Button>
-                        </Link>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        {" "}
-                        <Link to={`updateProduct/${item.id}`}>
+                        <Link to={`updateProductItem/${item.id}`}>
                           <Button
                             variant="contained"
                             color="secondary"
@@ -123,15 +121,6 @@ function AdminGetAllProduct() {
                             Update
                           </Button>
                         </Link>
-                        {/* <Link>
-                          <Button
-                            variant="contained"
-                            endIcon={<DeleteForeverIcon />}
-                            color="error"
-                          >
-                            Delete
-                          </Button>
-                        </Link> */}
                       </StyledTableCell>
                     </StyledTableRow>
                   );
@@ -140,7 +129,7 @@ function AdminGetAllProduct() {
           </Table>
           <div>
             {" "}
-            <Link to={`addProduct/${id}`}>
+            <Link to={`addProductItem/${proid}`}>
               <Button variant="contained" color="success">
                 Add
               </Button>
@@ -153,4 +142,4 @@ function AdminGetAllProduct() {
   );
 }
 
-export default AdminGetAllProduct;
+export default AdminProductItem;
