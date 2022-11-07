@@ -11,10 +11,15 @@ import FormLabel from "@mui/material/FormLabel";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import RemoveIcon from "@mui/icons-material/Remove";
-// import IconButton from "@material-ui/core/IconButton";
 import IconButton from "@mui/material/IconButton";
 import PlusOneRoundedIcon from "@mui/icons-material/PlusOneRounded";
 import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import RatingService from "../../Services/RatingService";
+import Rating from "@mui/material/Rating";
+import Typography from "@mui/material/Typography";
 let count = 0;
 function ProductDetail(props) {
   const styleInput = "w-[40px] mt-[5px]";
@@ -30,7 +35,7 @@ function ProductDetail(props) {
   const [productItemId, setProductItemId] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [quantityAddToCart, setQuantityAddToCart] = useState(0);
-
+  const [ratings, setRatings] = useState([]);
   useEffect(() => {
     const check = async () => {
       if (size != 0 && color != 0) {
@@ -40,12 +45,18 @@ function ProductDetail(props) {
           productid,
           size,
           color
-        ).then((res) => {
-          console.log(res.data);
-          setPrice(res.data.price);
-          setProductItemId(res.data.id);
-          setQuantity(res.data.quantity);
-        });
+        )
+          .then((res) => {
+            console.log(res.data);
+            setPrice(res.data.price);
+            setProductItemId(res.data.id);
+            setQuantity(res.data.quantity);
+          })
+          .catch((err) => {
+            setColor(0);
+            setSize(0);
+            alert("Not Found");
+          });
         setLoading(false);
       }
     };
@@ -55,19 +66,30 @@ function ProductDetail(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await ProductService.getProductItem(productid).then(
-          (res) => {
-            console.log(res.data.data);
-            setProductItem(res.data.data);
+        await ProductService.getProductItem(productid).then((res) => {
+          console.log(res.data.data);
+          setProductItem(res.data.data);
 
-            console.log(productItem);
-          }
-        );
+          console.log(productItem);
+        });
       } catch (err) {
         console.log(err);
       }
       setLoading(false);
       console.log(productItem);
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await RatingService.getAllRating(productid).then((res) => {
+          console.log(res);
+          setRatings(res.data);
+        });
+      } catch (err) {
+        console.log(err);
+      }
     };
     fetchData();
   }, []);
@@ -136,7 +158,7 @@ function ProductDetail(props) {
           </div>
           <div className="inline-flex flex-col ">
             <div> {productItem.name}</div>
-            {price != 0 && (
+            {price != 0 && size != 0 && color != 0 && (
               <div>
                 <div>quantity: {quantity}</div>
                 <div>price: {price}</div>
@@ -229,7 +251,7 @@ function ProductDetail(props) {
                 })}
               </RadioGroup>
             </FormControl>
-            {quantityAddToCart >= 1 && (
+            {quantityAddToCart >= 1 && size != 0 && color != 0 && (
               <div>
                 <Button variant="outlined" onClick={addToCart}>
                   Add to cart
@@ -237,6 +259,19 @@ function ProductDetail(props) {
               </div>
             )}
           </div>
+        </div>
+      )}
+      {ratings.length > 0 && (
+        <div>
+          {ratings.map((item) => {
+            return (
+              <div>
+                <h4>{item.tblUserByUserid.fullName}</h4>
+                <Rating name="read-only" value={item.ratingValue} readOnly />
+                <p>{item.comment} </p>
+              </div>
+            );
+          })}
         </div>
       )}
     </>
