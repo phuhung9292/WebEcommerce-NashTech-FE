@@ -46,7 +46,7 @@ export default function OrderHistory() {
         });
     };
     fetchData();
-  }, []);
+  }, [orderid]);
   useEffect(() => {
     const status = async () => {
       await Order.getStatusOrder(orderid).then((res) => {
@@ -66,8 +66,9 @@ export default function OrderHistory() {
             <StyledTableCell>Name Product</StyledTableCell>
             <StyledTableCell align="right">Image</StyledTableCell>
             <StyledTableCell align="right">Quantity</StyledTableCell>
-            <StyledTableCell align="right">Total</StyledTableCell>
+            <StyledTableCell align="right">Price</StyledTableCell>
             <StyledTableCell align="right">Detail</StyledTableCell>
+            <StyledTableCell align="right">Total</StyledTableCell>
             <StyledTableCell align="right"></StyledTableCell>
           </TableRow>
         </TableHead>
@@ -99,6 +100,9 @@ export default function OrderHistory() {
                         </p>
                       );
                     })}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {item.price * item.quantity}
                   </StyledTableCell>
                   <StyledTableCell>
                     {statusOrder.status == 4 && (

@@ -10,9 +10,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import SendIcon from "@mui/icons-material/Send";
-import IconButton from "@mui/material/IconButton";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -35,7 +32,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function AdminProductItem() {
   const { proid } = useParams();
   const [products, setProducts] = useState("");
-  const [cateId, setCateId] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       await ProductService.adminGetAllProductItemByProductId(proid)

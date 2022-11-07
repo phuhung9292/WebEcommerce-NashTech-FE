@@ -17,7 +17,9 @@ function AdminPage() {
           <Link to={"management-user"}>
             <Button>Users</Button>
           </Link>
-          <Button>Order</Button>
+          <Link to={"manage-orders"}>
+            <Button>Order</Button>
+          </Link>
         </ButtonGroup>
       </div>
       <Outlet />
