@@ -10,6 +10,23 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Rating from "@mui/material/Rating";
+import RatingService from "../../Services/RatingService";
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -30,6 +47,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 export default function OrderHistory() {
+  const [value, setValue] = useState(5);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [comment, setComment] = useState("");
   const { orderid } = useParams();
   const [products, setProduct] = useState(null);
   const [statusOrder, setStatusOrder] = useState(null);
@@ -57,6 +79,13 @@ export default function OrderHistory() {
     status();
   }, []);
   useEffect(() => {}, [statusOrder]);
+
+  const ratingProduct = async (id) => {
+    await RatingService.userRating(comment, value, id).then((res) => {
+      console.log(res);
+      setOpen(false);
+    });
+  };
 
   return (
     <TableContainer component={Paper}>
@@ -106,9 +135,42 @@ export default function OrderHistory() {
                   </StyledTableCell>
                   <StyledTableCell>
                     {statusOrder.status == 4 && (
-                      <Link>
-                        <Button variant="outlined">Rating</Button>
-                      </Link>
+                      <div>
+                        <Button variant="outlined" onClick={handleOpen}>
+                          Rating
+                        </Button>
+                        <Modal
+                          open={open}
+                          onClose={handleClose}
+                          aria-labelledby="modal-modal-title"
+                          aria-describedby="modal-modal-description"
+                        >
+                          <Box sx={style}>
+                            <Typography component="legend">Rating</Typography>
+                            <Rating
+                              name="simple-controlled"
+                              value={value}
+                              onChange={(event, newValue) => {
+                                setValue(newValue);
+                              }}
+                            />
+                            <Typography
+                              id="modal-modal-description"
+                              sx={{ mt: 2 }}
+                            >
+                              <TextField
+                                id="standard-basic"
+                                label="Comment"
+                                variant="standard"
+                                onChange={(e) => setComment(e.target.value)}
+                              />
+                            </Typography>
+                            <Button onClick={() => ratingProduct(item.id)}>
+                              OK
+                            </Button>
+                          </Box>
+                        </Modal>
+                      </div>
                     )}
                   </StyledTableCell>
                 </StyledTableRow>
