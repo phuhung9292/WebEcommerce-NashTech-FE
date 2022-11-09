@@ -87,7 +87,12 @@ function App() {
           )}
 
           <div className="center flex-1 text-center ">
-            <div className="logo font-bold text-lg"> Shoppi</div>
+            <Link
+              to={"/home"}
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <div className="logo font-bold text-lg"> Shoppi</div>
+            </Link>
           </div>
           <div className="right flex flex-1 items-center justify-end">
             {currentUser ? (
@@ -114,13 +119,21 @@ function App() {
               <div className="right flex flex-1 items-center justify-end">
                 <div className={style}>
                   {" "}
-                  <Link to={"/login"} className="nav-Link">
+                  <Link
+                    to={"/login"}
+                    className="nav-Link"
+                    style={{ textDecoration: "none", color: "black" }}
+                  >
                     Login
                   </Link>
                 </div>
                 <div className={style}>
                   {" "}
-                  <Link to={"/registor"} className="nav-Link">
+                  <Link
+                    to={"/registor"}
+                    className="nav-Link"
+                    style={{ textDecoration: "none", color: "black" }}
+                  >
                     Sign Up
                   </Link>
                 </div>

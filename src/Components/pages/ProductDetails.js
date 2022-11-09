@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import * as React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ProductService from "../../Services/ProductService";
 
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -36,6 +36,8 @@ function ProductDetail(props) {
   const [quantity, setQuantity] = useState(0);
   const [quantityAddToCart, setQuantityAddToCart] = useState(0);
   const [ratings, setRatings] = useState([]);
+  const user = JSON.parse(localStorage.getItem("user"));
+  let navigate = useNavigate();
   useEffect(() => {
     const check = async () => {
       if (size != 0 && color != 0) {
@@ -66,12 +68,16 @@ function ProductDetail(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        await ProductService.getProductItem(productid).then((res) => {
-          console.log(res.data.data);
-          setProductItem(res.data.data);
+        await ProductService.getProductItem(productid)
+          .then((res) => {
+            console.log(res.data.data);
+            setProductItem(res.data.data);
 
-          console.log(productItem);
-        });
+            console.log(productItem);
+          })
+          .catch((err) => {
+            alert("Not Have Detail");
+          });
       } catch (err) {
         console.log(err);
       }
@@ -132,9 +138,22 @@ function ProductDetail(props) {
     }
   };
   const addToCart = async () => {
-    console.log(productItemId, quantityAddToCart);
-    await ProductService.addProductItemToCart(productItemId, quantityAddToCart);
-    setQuantityAddToCart(0);
+    if (!user) {
+      alert("Need to login");
+      navigate("/login");
+    } else if (user.role[0].authority == "Customer") {
+      console.log(productItemId, quantityAddToCart);
+      await ProductService.addProductItemToCart(
+        productItemId,
+        quantityAddToCart
+      );
+      setQuantityAddToCart(0);
+    } else if (user.role[0].authority == "Admin") {
+      alert("Login User to Add");
+      localStorage.removeItem("user");
+      navigate("/login");
+      window.location.reload(false);
+    }
   };
   useEffect(() => {}, [quantityAddToCart]);
   return (
