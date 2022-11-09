@@ -29,6 +29,9 @@ class ProductService {
       }
     );
   }
+  getProductBestSeller() {
+    return axios.get(PRODUCT_API_BASE_URL + "/getAll");
+  }
   getAllCategory() {
     return axios.get(CATEGORY_API_BASE_URL + "/categories");
   }

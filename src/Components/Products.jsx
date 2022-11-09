@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import ProductService from "../Services/ProductService";
-
+import Grid from "@mui/material/Grid";
 export default function Products() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState(null);
+  const [productBestSeller, setProductBestSeller] = useState([]);
   // const ProductList = () => {
 
   useEffect(() => {
@@ -22,29 +23,63 @@ export default function Products() {
     };
     fetchData();
   }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      await ProductService.getProductBestSeller().then((res) => {
+        console.log(res.data);
+        setProductBestSeller(res.data);
+      });
+    };
+    fetchData();
+  }, []);
   return (
     <>
+      {productBestSeller.length > 0 && (
+        <div className="">
+          <h2>Best Seller</h2>
+          <Grid container spacing={2}>
+            {productBestSeller.map((product) => (
+              <Grid item md={4}>
+                <Link key={product.id} to={`/productDetail/${product.id}`}>
+                  <div class="card">
+                    <img
+                      src={product.productImage}
+                      className="card-img-top"
+                      alt="..."
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title">{product.name}</h5>
+                      <p class="card-text"> {product.description}</p>
+                    </div>
+                  </div>
+                </Link>
+              </Grid>
+            ))}
+          </Grid>
+        </div>
+      )}
+      <h2>All Products</h2>
       {!loading && (
-        <div className="col-md-3">
-          {products.map((product) => (
-            <Link key={product.id} to={`/productDetail/${product.id}`}>
-              <div class="card">
-                <img
-                  src={product.productImage}
-                  className="card-img-top"
-                  alt="..."
-                />
-                <div class="card-body">
-                  <h5 class="card-title">{product.name}</h5>
-                  <p class="card-text"> {product.description}</p>
-                  {/* <a href="" class="btn btn-primary">
-                  {" "}
-                  Details
-                </a> */}
-                </div>
-              </div>
-            </Link>
-          ))}
+        <div>
+          <Grid container spacing={2}>
+            {products.map((product) => (
+              <Grid item md={4}>
+                <Link key={product.id} to={`/productDetail/${product.id}`}>
+                  <div class="card">
+                    <img
+                      src={product.productImage}
+                      className="card-img-top"
+                      alt="..."
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title">{product.name}</h5>
+                      <p class="card-text"> {product.description}</p>
+                    </div>
+                  </div>
+                </Link>
+              </Grid>
+            ))}
+          </Grid>
         </div>
       )}
     </>

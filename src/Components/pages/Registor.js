@@ -1,8 +1,8 @@
-import React, { useState, useNavigate } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthService from "../../Services/AuthService";
 
 export default function Registor() {
-  let navigate = useNavigate();
   const [formRegistor, setFormRegistor] = useState({
     fullName: "",
     email: "",
@@ -10,6 +10,7 @@ export default function Registor() {
     address: "",
     phone: "",
   });
+  let navigate = useNavigate();
   const registor = async () => {
     AuthService.registor(
       formRegistor.fullName,
@@ -19,7 +20,7 @@ export default function Registor() {
       formRegistor.phone
     )
       .then((res) => {
-        aleart(res.data.message);
+        alert(res.data.message);
         navigate("/home");
       })
       .catch((err) => {
